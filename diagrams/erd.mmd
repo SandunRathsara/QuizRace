@@ -1,0 +1,76 @@
+---
+title: Kahoot Clone - ERD
+---
+
+erDiagram
+    User {
+        int id
+        string email
+        string firstName
+        string lastName
+    }
+
+    Question {
+        int id
+        string question
+        string answer
+        srting[3] options
+        Session session
+        int order
+        boolean completed
+        int timeToSee
+        int timeToAnswer
+        Date answerTimeStartedAt
+    }
+
+    Session {
+        int id
+        stirng name
+        User host
+        boolean started
+        Date startedAt
+        boolean ended
+        Date endedAt
+        boolean showGraph
+    }
+
+    Answer {
+        int id
+        Question question
+        Session session
+        User respondent
+        Answer answer
+        Date answeredTime
+        int position
+        int marks
+    }
+
+    SessionParticipant {
+        User participant
+        Session session
+    }
+
+    Winner {
+        Session session
+        User participant
+        int position
+        int marks
+    }
+
+    Session |o--|{ User: "Can host"
+
+    SessionParticipant }|--|| Session: "Can have"
+
+    SessionParticipant }|--|| User: "Can participate"
+
+    Session ||--|{ Question: "Can have"
+
+    Answer }o--|| Question: "Can Have"
+
+    Answer }o--|| Session: "Can Have"
+
+    Answer ||--|| User: "Can Answer"
+
+    User ||--|{ Winner: "Might be a"
+
+    Session ||--|{ Winner: "Have"
