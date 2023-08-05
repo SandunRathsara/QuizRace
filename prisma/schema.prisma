@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String               @id @default(uuid())
+  email              String
+  firstName          String
+  lastName           String
+  Session            Session[]
+  Answer             Answer[]
+  SessionParticipant SessionParticipant[]
+  Winner             Winner[]
+}
+
+model Question {
+  id                  String   @id @default(uuid())
+  question            String
+  answer              String
+  options             String[]
+  session             Session  @relation(fields: [sessionId], references: [id])
+  sessionId           String
+  order               Int
+  completed           Boolean
+  timeToSee           Int
+  timeToAnswer        Int
+  answerTimeStartedAt DateTime
+  Answer              Answer[]
+}
+
+model Session {
+  id                 String               @id @default(uuid())
+  name               String
+  host               User                 @relation(fields: [hostId], references: [id])
+  hostId             String
+  started            Boolean
+  startedAt          DateTime
+  ended              Boolean
+  endedAt            DateTime
+  showGraph          Boolean
+  Question           Question[]
+  Answer             Answer[]
+  SessionParticipant SessionParticipant[]
+  Winner             Winner[]
+}
+
+model Answer {
+  id           String   @id @default(uuid())
+  question     Question @relation(fields: [questionId], references: [id])
+  questionId   String
+  session      Session  @relation(fields: [sessionId], references: [id])
+  sessionId    String
+  respondent   User     @relation(fields: [respondentId], references: [id])
+  respondentId String
+  answer       String
+  answeredTime DateTime
+  position     Int
+  marks        Int
+}
+
+model SessionParticipant {
+  participant   User    @relation(fields: [participantId], references: [id])
+  participantId String
+  session       Session @relation(fields: [sessionId], references: [id])
+  sessionId     String
+
+  @@id([participantId, sessionId])
+}
+
+model Winner {
+  id            String  @id @default(uuid())
+  session       Session @relation(fields: [sessionId], references: [id])
+  sessionId     String
+  participant   User    @relation(fields: [participantId], references: [id])
+  participantId String
+  position      Int
+  marks         Int
+}

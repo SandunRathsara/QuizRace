@@ -4,57 +4,58 @@ title: Kahoot Clone - ERD
 
 erDiagram
     User {
-        int id
-        string email
-        string firstName
-        string lastName
+        id Int[PK]
+        email String
+        firstName String
+        lastName String
     }
 
     Question {
-        int id
-        string question
-        string answer
-        srting[3] options
-        Session session
-        int order
-        boolean completed
-        int timeToSee
-        int timeToAnswer
-        Date answerTimeStartedAt
+        id Int[PK]
+        question String
+        answer String
+        options String[3]
+        session Session[FK]
+        order Int
+        completed Boolean
+        timeToSee Int
+        timeToAnswer Int
+        answerTimeStartedAt Date
     }
 
     Session {
-        int id
-        stirng name
-        User host
-        boolean started
-        Date startedAt
-        boolean ended
-        Date endedAt
-        boolean showGraph
+        id Int[PK]
+        name String
+        host User[FK]
+        started Boolean
+        startedAt Date
+        ended Boolean
+        endedAt Date
+        showGraph Boolean
     }
 
     Answer {
-        int id
-        Question question
-        Session session
-        User respondent
-        Answer answer
-        Date answeredTime
-        int position
-        int marks
+        id Int[PK]
+        question Question[FK]
+        session Session[FK]
+        respondent User[FK]
+        answer String
+        answeredTime Date
+        position Int
+        marks Int
     }
 
     SessionParticipant {
-        User participant
-        Session session
+        participant User[PK]
+        session Session[PK]
     }
 
     Winner {
-        Session session
-        User participant
-        int position
-        int marks
+        id String[PK]
+        session Session[FK]
+        participant User[FK]
+        position Int
+        marks Int
     }
 
     Session |o--|{ User: "Can host"
